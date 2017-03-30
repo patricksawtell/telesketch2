@@ -1,0 +1,87 @@
+
+<% if ( current_user && @story.inputs.where("user_id = ?", current_user.id).any? ) || @story.complete %>
+  <div style="position:relative; width: 1000px; margin: 0 auto;">
+    <br/>
+    <div id="carousel" class="slider multiple-items" >
+      <% @story.inputs.each do |input| %>
+        <% if input.is_a?(Text) %>
+        <div id="box">
+          <p> <a href="/users/<%= input.user_id %>"><%= input.caption %></a></p>
+        </div>
+        <% else %>
+
+           <img src ="../<%= input.image_path %>"/>
+
+        <% end %>
+      <% end %> 
+    </div>
+  </div>
+
+<div class="contributors">
+  <div class="row text-center">
+    <form method="post" action="/stories/<%= params[:id] %>/rating">
+
+    <div class="container">
+      <ul class="rating-w-images">  
+        <li class="rated">1</li>
+        <li class="rated">2</li>
+        <li class="rated">3</li>
+        <li class="rated">4</li>
+        <li class="rated">5</li>
+      </ul>
+    </div>
+
+
+
+       <!--  <input type="radio" name="rating" value="1"><i></i>  
+        <input type="radio" name="rating" value="2"><i></i>  
+        <input type="radio" name="rating" value="3"><i></i>  
+        <input type="radio" name="rating" value="4"><i></i> 
+        <input type="radio" name="rating" value="5"><i></i>
+      </span> -->
+      <button>Submit</button>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="container">
+ <div class="row">
+   <% @story.inputs.each do |input| %>
+   <div class="col-md-4 col-sm-4 col-sm-offset-0 col-xs-8 col-xs-offset-2 profile-card-link">
+     <a href="/users/<%= input.user_id %>">
+       <div class="profile-card profile-card-story">
+         <img src="<%= input.user.image %>">
+         <div class="profile-info">
+           <h4 class="subheader"><%= input.user.name %></h4>
+         </div>
+         <p style="text-align:center; font-size:16px;"><small>User created: <%= input.user.created_at.strftime('%m.%d.%Y') %>
+         </br>
+         Last played: <%= input.user.updated_at.strftime('%m.%d.%Y') %> </small></p> 
+       </div>
+     </a>
+   </div>
+   <% end %>
+ </div>
+</div>
+<% else %>
+<div class="container">
+<div class="jumbotron col-md-10 col-md-offset-1">  
+  <h1>We're Sorry, You must play a game before you can view it!</h1>
+  </br>
+  <div class="row text-center">
+    <div class="col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
+      <a href="/stories/join" id="story-title-link"><h2>Click to Play Now!</h2></a>
+    </div>
+  </div>
+</div>
+</div>
+<% end %>
+
+<style>
+ .slick-prev:before, .slick-next:before { 
+   color:red !important;
+ }
+</style>
+
